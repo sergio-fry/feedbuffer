@@ -3,7 +3,8 @@ require.config({
   baseUrl: 'js',
   paths: {
     jquery: "vendor/jquery",
-    underscore: "vendor/underscore"
+    underscore: "vendor/underscore",
+    text: "vendor/requirejs-text"
   },
   // Add this map config in addition to any baseUrl or
   // paths config you may already have in the project.
