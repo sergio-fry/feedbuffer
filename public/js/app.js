@@ -1,5 +1,5 @@
 require.config({
-  urlArgs: "v=2",
+  urlArgs: "v=4",
   baseUrl: 'js',
   paths: {
     jquery: "vendor/jquery",
@@ -26,9 +26,9 @@ require.config({
 });
 
 require(["core", "underscore"], function(core, _) {
+  require(["/bootstrap/js/bootstrap.min.js"]);
 
   var pages = [
-    ["Профиль", "profile"],
     ["Потоки", "feeds"],
   ];
 
@@ -44,7 +44,4 @@ require(["core", "underscore"], function(core, _) {
       if(index==0) { core.select_page(page); }
     });
   })
-
-
-
 });
