@@ -1,22 +1,10 @@
 require.config({
-  urlArgs: "v=4",
+  urlArgs: "v=5",
   baseUrl: 'js',
   paths: {
     jquery: "vendor/jquery",
     underscore: "vendor/underscore",
     text: "vendor/requirejs-text"
-  },
-  // Add this map config in addition to any baseUrl or
-  // paths config you may already have in the project.
-  map: {
-    // '*' means all modules will get 'jquery-private'
-    // for their 'jquery' dependency.
-    '*': { 'jquery': 'jquery-no-conflict' },
-
-    // 'jquery-private' wants the real jQuery module
-    // though. If this line was not here, there would
-    // be an unresolvable cyclic dependency.
-    'jquery-no-conflict': { 'jquery': 'jquery' }
   },
   shim: {
     'underscore': {
@@ -26,10 +14,13 @@ require.config({
 });
 
 require(["core", "underscore"], function(core, _) {
-  require(["/bootstrap/js/bootstrap.min.js"]);
+  require(["jquery"], function() {
+    require(["/bootstrap/js/bootstrap.min.js"]);
+  });
 
   var pages = [
     ["Потоки", "feeds"],
+    ["Очередь", "queue"],
   ];
 
   var page_module_paths = _.chain(pages).pluck('1').map(function(p) { return "pages/"+p+"/app" }).value();
