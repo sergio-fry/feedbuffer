@@ -4,12 +4,9 @@ define(["jquery", "underscore"], function ($, _) {
   var pages_tabs = tabs.find("ul.nav-tabs");
   var pages_content = tabs.find(".tab-content");
 
-  var page_ids = {};
   var pages = {};
 
-  var add_page = function(title, page) {
-    var id = _.uniqueId("page-tab");
-    page_ids[page] = id;
+  var add_page = function(id, page, title) {
     pages[id] = page;
 
     var tab = $("<a aria-controls='home' role='tab' data-toggle='tab'>").text(title).attr({ href: "#" + id }).data("page", page);
@@ -20,16 +17,20 @@ define(["jquery", "underscore"], function ($, _) {
     pages_content.append(tab_content);
   }
 
-  var select_page = function(page) {
-    pages_tabs.find("a[href='#"+page_ids[page]+"']").tab('show');
+  var select_page = function(id) {
+    pages_tabs.find("a[href='#"+id+"']").tab('show');
   }
 
   tabs.on("show.bs.tab", function(event) {
     var tab_id = $(event.target).attr("href").replace("#", "");
     var page = pages[tab_id];
-    console.log("#" + tab_id);
 
-    page.render($("#" + tab_id));
+    window.location.hash = tab_id;
+
+    if(!$(page).data("rendered")) {
+      page.render($("#" + tab_id));
+      $(page).data("rendered", true);
+    }
   });
 
   return {

@@ -1,0 +1,4 @@
+table#feeds td.id { font-weight: bold }
+table#feeds td.actions { text-align: right }
+table#feeds td input { width: 100% }
+table#feeds td.deleted { text-align: center; }

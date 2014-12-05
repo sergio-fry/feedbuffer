@@ -1,14 +1,23 @@
 require.config({
-  urlArgs: "v=5",
+  urlArgs: "v=6",
   baseUrl: 'js',
   paths: {
     jquery: "vendor/jquery",
     underscore: "vendor/underscore",
-    text: "vendor/requirejs-text"
+    text: "vendor/requirejs-text",
+    humane: "vendor/humane",
+    //backbone: "vendor/backbone"
+    backbone: "http://backbonejs.org/backbone"
   },
   shim: {
     'underscore': {
       exports: '_'
+    },
+    'humane': {
+      exports: 'humane',
+    },
+    'backbone': {
+      exports: 'Backbone'
     }
   }
 });
@@ -19,20 +28,24 @@ require(["core", "underscore"], function(core, _) {
   });
 
   var pages = [
-    ["Потоки", "feeds"],
-    ["Очередь", "queue"],
+    ["feeds", "Потоки"],
+    ["queue", "Очередь"],
   ];
 
-  var page_module_paths = _.chain(pages).pluck('1').map(function(p) { return "pages/"+p+"/app" }).value();
+  var page_module_paths = _.chain(pages).pluck('0').map(function(p) { return "pages/"+p+"/app" }).value();
 
   require(page_module_paths, function() {
     var page_modules = arguments;
 
     _.each(pages, function(p, index) {
       var page = page_modules[index];
+      var id = p[0], title = p[1];
 
-      core.add_page(p[0], page);
-      if(index==0) { core.select_page(page); }
+      core.add_page(id, page, title);
+
+      if((window.location.hash == "" && index == 0) || window.location.hash == "#" + id) {
+        core.select_page(id);
+      }
     });
   })
 });

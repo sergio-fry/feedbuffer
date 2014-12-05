@@ -1,7 +1,19 @@
-define(["jquery", "require", "text!./templates/feed.html"], function ($, require, feed_template) {
+define([
+  "jquery", "backbone", "underscore", "require", "api",
+  "./js/page_view",
+], function (
+  $, Backbone, _, require, api,
+  PageView
+) {
+
+  var page = new PageView();
+
   return {
     render: function($el) {
-      return $el.html("Добавьте новый поток <img src='" + require.toUrl("./img/img1.jpeg") + "'/> <button>Добавить</button>");
+      page.setElement($el);
+      page.render();
+
+      return page.$el;
     }
   };
 });
