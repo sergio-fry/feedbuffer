@@ -9,6 +9,9 @@ define([
 ) {
 
   var PageView = Backbone.View.extend({
+    events: {
+      "click .add-new-feed": "addNewFeed",
+    },
     template: _.template(page_template),
 
     render: function() {
@@ -33,6 +36,17 @@ define([
 
       return this.$el;
     },
+
+    addNewFeed: function(event) {
+      var feed = new (api.feeds.model)();
+      var feed_view = new FeedView({ model: feed});
+      feed_view.state = "STATE_EDIT" ;
+
+      this.$el.find("#feeds").append(feed_view.render());
+
+      feed_view.$el.find("[name='url']").focus();
+      return false;
+    }
   });
 
   return PageView;

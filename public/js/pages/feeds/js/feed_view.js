@@ -31,13 +31,18 @@ define([
       return this.$el.html(this.template({
         id: this.model.get("id"),
         title: this.model.get("title"),
+        favicon_url: this.model.favicon_url(),
         url: this.model.get("url")
       }));
     },
 
     onClickCancel: function() {
-      this.state = "STATE_SHOW"
-      this.render();
+      if(this.model.isNew()) {
+        this.$el.remove();
+      } else {
+        this.state = "STATE_SHOW"
+        this.render();
+      }
 
       return false;
     },
@@ -50,11 +55,12 @@ define([
       widget = this;
 
       this.$el.find(".actions a").addClass("disabled");
-      this.model.save().always(function() {
+      this.model.save().then(function() {
         widget.state = "STATE_SHOW"
         widget.render();
       }).fail(function() {
-        api.notify.error("Не удалось сохранить ленту " + widget.model.get("title"));
+        widget.$el.find(".actions a").removeClass("disabled");
+        api.notify.error("Не удалось сохранить ленту " + (widget.model.get("title") || ""));
       });
 
       return false;
@@ -65,12 +71,12 @@ define([
 
       this.$el.find(".actions a").addClass("disabled");
 
+      this.$el.find(".actions a").addClass("disabled");
       this.model.destroy().then(function() {
         widget.$el.replaceWith("<tr><td colspan='4' class='deleted'>Лента "+widget.model.get('title')+" удалена</td></tr>");
       }).fail(function() {
+        widget.$el.find(".actions a").removeClass("disabled");
         api.notify.error("Не удалось удалить ленту " + widget.model.get("title"));
-        widget.state = "STATE_SHOW"
-        widget.render();
       });
 
       return false;

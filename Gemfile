@@ -40,3 +40,7 @@ gem 'spring',        group: :development
 
 gem 'grape'
 gem 'grape-entity'
+
+group :development, :test do
+  gem 'rspec-rails'
+end

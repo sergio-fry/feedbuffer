@@ -1,5 +1,6 @@
 module Api
   class Api < Grape::API
+    format :json
 
     get :status do
       { status: "ok" }
@@ -19,6 +20,21 @@ module Api
       get do
         Feed.all
         present Feed.all, with: Entities::Feed
+      end
+
+
+
+      params do
+        requires :url, type: String
+      end
+      post do
+        @feed = Feed.new({
+          url: params[:url]
+        })
+
+        @feed.save!
+
+        present @feed, with: Entities::Feed
       end
 
 

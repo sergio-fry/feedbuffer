@@ -1,7 +1,10 @@
 define(["jquery", "backbone", "humane"], function($, Backbone, humane) {
   var Feed = Backbone.Model.extend({
-    url: function() {
-      return "/api/v1/feeds/" + this.get("id");
+    urlRoot: "/api/v1/feeds",
+    favicon_url: function() {
+      var l = document.createElement("a");
+      l.href = this.get('url');
+      return "http://g.etfv.co/"+l.protocol+"//"+l.hostname;
     },
   });
 
