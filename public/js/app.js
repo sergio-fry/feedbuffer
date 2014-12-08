@@ -1,5 +1,5 @@
 require.config({
-  urlArgs: "v=6",
+  urlArgs: "v=7",
   baseUrl: 'js',
   paths: {
     jquery: "vendor/jquery",
@@ -28,7 +28,7 @@ require(["core", "underscore"], function(core, _) {
   });
 
   var pages = [
-    ["feeds", "Потоки"],
+    ["feeds-settings", "Настройка лент"],
     ["queue", "Очередь"],
   ];
 
