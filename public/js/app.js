@@ -1,13 +1,14 @@
 require.config({
-  urlArgs: "v=7",
+  urlArgs: "v=11",
   baseUrl: 'js',
   paths: {
     jquery: "vendor/jquery",
+    depot: "vendor/depot.min",
+    kizzy: "vendor/kizzy.min",
     underscore: "vendor/underscore",
     text: "vendor/requirejs-text",
     humane: "vendor/humane",
-    //backbone: "vendor/backbone"
-    backbone: "http://backbonejs.org/backbone"
+    backbone: "vendor/backbone"
   },
   shim: {
     'underscore': {
@@ -28,6 +29,7 @@ require(["core", "underscore"], function(core, _) {
   });
 
   var pages = [
+    ["content", "Новое"],
     ["feeds-settings", "Настройка лент"],
     ["queue", "Очередь"],
   ];

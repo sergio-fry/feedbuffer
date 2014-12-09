@@ -2,9 +2,7 @@ define(["jquery", "backbone", "humane"], function($, Backbone, humane) {
   var Feed = Backbone.Model.extend({
     urlRoot: "/api/v1/feeds",
     favicon_url: function() {
-      var l = document.createElement("a");
-      l.href = this.get('url');
-      return "http://g.etfv.co/"+l.protocol+"//"+l.hostname;
+      return URI(this.get('url')).favicon;
     },
   });
 
@@ -13,14 +11,35 @@ define(["jquery", "backbone", "humane"], function($, Backbone, humane) {
     model: Feed,
   });
 
+  var QueueItem = Backbone.Model.extend({
+    urlRoot: "/api/v1/queue/items",
+  });
+
+  var QueueCollection = Backbone.Collection.extend({
+    url: "/api/v1/queue/items",
+    model: QueueItem,
+  });
+
   var notifications = {
     base: humane.log,
     info: humane.spawn({ addnCls: 'humane-libnotify-info' }),
     error: humane.spawn({ addnCls: 'humane-libnotify-error' })
   }
+  
+  var URI = function(url) {
+    var l = document.createElement("a");
+    l.href = url;
+    l.favicon = "http://g.etfv.co/"+l.protocol+"//"+l.hostname;
+    return l;
+  }
 
   return {
     feeds: new FeedsCollection(),
-    notify: notifications
+    queue: new QueueCollection(),
+    notify: notifications,
+
+    utils: {
+      URI: URI,
+    }
   }
 });

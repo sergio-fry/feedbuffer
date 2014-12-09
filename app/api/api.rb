@@ -22,8 +22,6 @@ module Api
         present Feed.all, with: Entities::Feed
       end
 
-
-
       params do
         requires :url, type: String
       end
@@ -56,6 +54,37 @@ module Api
           })
 
           present @feed, with: Entities::Feed
+        end
+      end
+    end
+
+    namespace :queue do
+      module Entities
+        class QueueItem < Grape::Entity
+          expose :id
+          expose :title
+          expose :url
+        end
+      end
+
+      before do
+        @queue = ExportQueue.first || ExportQueue.create
+      end
+
+      namespace :items do
+        get do
+          present @queue.items, with: Entities::QueueItem
+        end
+
+        params do
+          requires :title, type: String
+          optional :url, type: String
+        end
+        post do
+          @item = @queue.add_item(params)
+          @queue.save!
+
+          present @item, with: Entities::QueueItem
         end
       end
     end
