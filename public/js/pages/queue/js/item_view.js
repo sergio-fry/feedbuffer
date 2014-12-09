@@ -7,8 +7,10 @@ define([
 ) {
 
   var ItemView = Backbone.View.extend({
-    tagName: "tr",
     events: {
+      "mouseover": "showControls",
+      "mouseout": "hideControls",
+      "click .actions .delete": "delete",
     },
     template: _.template(template),
 
@@ -17,6 +19,27 @@ define([
 
       return this.$el;
     },
+
+    showControls: function() {
+      this.$el.find(".actions").removeClass("invisible");
+    },
+
+    hideControls: function() {
+      this.$el.find(".actions").addClass("invisible");
+    },
+
+    "delete": function() {
+      this.$el.find("btn").addClass("disabled");
+      var widget = this;
+
+      this.model.destroy().then(function() {
+        widget.$el.fadeOut();
+      }).fail(function() {
+        widget.$el.fadeOut();
+      });
+
+      return false;
+    }
   })
 
   return ItemView;

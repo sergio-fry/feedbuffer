@@ -86,6 +86,13 @@ module Api
 
           present @item, with: Entities::QueueItem
         end
+
+        namespace ':item_id' do
+          delete do
+            @queue.delete_item(params[:item_id])
+            @queue.save!
+          end
+        end
       end
     end
   end

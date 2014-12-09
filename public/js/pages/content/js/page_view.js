@@ -1,19 +1,16 @@
 define([
-  "jquery", "backbone", "underscore", "require", "api", "kizzy",
+  "jquery", "backbone", "underscore", "require", "api",
   "./feed_fetcher", 
   "./item_view", 
   "text!./../templates/page.html",
 ], function(
-  $, Backbone, _, require, api, Store,
+  $, Backbone, _, require, api,
   FeedFetcher,
   ItemView,
   template
 ) {
 
   var PageView = Backbone.View.extend({
-    initialize: function() {
-      this.store = Store("content");
-    },
     events: {
     },
     template: _.template(template),
@@ -33,11 +30,15 @@ define([
 
         var wrapper = $("<div>");
 
-        feed_fetcher.fetch_items({ limit: 20, limit_per_feed: 10 }, function(items) {
-          _(items).each(function(item) {
-            if(_(widget.store.get("published_urls") || []).indexOf(item.link) == -1) {
+        api.queue.fetch().then(function() {
+          var queued_urls = api.queue.map(function(el, i) { return el.get('url') });
+
+          feed_fetcher.fetch_items({ limit: 20, limit_per_feed: 10 }, function(items) {
+            _.chain(items).reject(function(el) {
+              return queued_urls.indexOf(el.link) != -1 ;
+            }).each(function(item) {
               wrapper.append(new ItemView({ item: item }).render());
-            }
+            });
           });
         });
 

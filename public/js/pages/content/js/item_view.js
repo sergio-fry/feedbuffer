@@ -1,15 +1,10 @@
 define([
-  "jquery", "underscore", "api", "kizzy",
+  "jquery", "underscore", "api",
   "text!./../templates/item.html",
 ], function(
-  $,  _, api, Store,
+  $,  _, api,
   template
 ) {
-  var store = Store("content");
-  if(store.get("published_urls") == undefined) {
-    store.set("published_urls", [])
-  }
-
   var ItemView = Backbone.View.extend({
     initialize: function(options) {
       this.item = options.item;
@@ -39,10 +34,6 @@ define([
         api.queue.add(model);
         api.notify.info("Запись успешно добавлена в очередь");
         widget.$el.fadeOut();
-
-        var published_urls = store.get("published_urls");
-        published_urls.push(model.get("url"))
-        store.set("published_urls", published_urls);
       }).fail(function() {
         api.notify.error("Не удалось добавить запись в очередь");
         widget.$el.find(".actions a").removeClass("disabled");

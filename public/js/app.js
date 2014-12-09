@@ -1,5 +1,5 @@
 require.config({
-  urlArgs: "v=11",
+  urlArgs: "v=12",
   baseUrl: 'js',
   paths: {
     jquery: "vendor/jquery",
@@ -29,9 +29,9 @@ require(["core", "underscore"], function(core, _) {
   });
 
   var pages = [
+    ["queue", "Очередь"],
     ["content", "Новое"],
     ["feeds-settings", "Настройка лент"],
-    ["queue", "Очередь"],
   ];
 
   var page_module_paths = _.chain(pages).pluck('0').map(function(p) { return "pages/"+p+"/app" }).value();

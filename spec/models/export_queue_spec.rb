@@ -34,6 +34,18 @@ RSpec.describe ExportQueue, :type => :model do
     end
   end
 
+  describe "#delete_item" do
+    before do
+      @item = @queue.add_item :title => "foo"
+    end
+
+    it "should delete item from queue" do
+      expect do
+        @queue.delete_item(@item.id)
+      end.to change{ @queue.items.size }.by(-1)
+    end
+  end
+
   describe "#schedule!" do
     it "should update next_scheduled_at"
     it "should update scheduled_at for items"

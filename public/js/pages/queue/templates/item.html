@@ -3,6 +3,9 @@
     <%= title %>
     <a href="<%= url %>" title="<%= url %>" target="_blank"><%= (url.length < 22) ? url : url.substr(0, 19) + "..." %></a>
    
-    <div class="actions"><a href="#" class="btn btn-default btn-xs publish">Опубликовать сейчас</a></div>
+    <div class="actions invisible">
+      <a href="#" class="btn btn-danger btn-xs delete">Удалить</a>
+      <a href="#" class="btn btn-primary btn-xs publish">Опубликовать сейчас</a>
+    </div>
   </div>
 </div>

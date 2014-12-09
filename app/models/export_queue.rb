@@ -9,6 +9,10 @@ class ExportQueue < ActiveRecord::Base
     build_item(attrs)
   end
 
+  def delete_item(item_id)
+    self.items_attributes.reject! { |el| el["id"] == item_id }
+  end
+
   def items
     items_attributes.map do |attrs|
       OpenStruct.new attrs 
