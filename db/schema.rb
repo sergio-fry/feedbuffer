@@ -11,10 +11,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141209091331) do
+ActiveRecord::Schema.define(version: 20141209210606) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "export_histories", force: true do |t|
+    t.text     "items_attributes", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "export_queues", force: true do |t|
     t.text     "items_attributes",  null: false

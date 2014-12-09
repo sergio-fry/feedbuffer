@@ -61,4 +61,27 @@ RSpec.describe ExportQueue, :type => :model do
       expect(@queue.find_item(item.id).scheduled_at).to be_present
     end
   end
+
+  describe "#export!" do
+    before do
+      @export_history = ExportHistory.new
+      allow(@queue).to receive(:export_history).and_return(@export_history)
+
+      @item = @queue.add_item :title => "foo"
+    end
+
+    it "should export expired item" do
+      @queue.update_item(@item.id, :scheduled_at => 1.minute.ago)
+
+      expect(@export_history).to receive(:add_item) do |attrs|
+        expect(attrs["title"]).to eq("foo")
+      end
+
+      expect do
+        @queue.export!
+      end.to change{ @queue.items.size }.by(-1)
+    end
+
+    it "should not export item scheduled to future"
+  end
 end
