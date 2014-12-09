@@ -29,7 +29,7 @@ define([
 
       var widget = this;
       feeds.fetch().then(function() {
-        var feed_fetcher = new FeedFetcher(feeds.map(function(f) { return f.get('url') }));
+        var feed_fetcher = new FeedFetcher(_(feeds.map(function(f) { return f.get('url') })).uniq());
 
         var wrapper = $("<div>");
 

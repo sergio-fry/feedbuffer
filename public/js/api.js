@@ -33,9 +33,12 @@ define(["jquery", "backbone", "humane"], function($, Backbone, humane) {
     return l;
   }
 
+  var feeds = new FeedsCollection()
+  var queue = new QueueCollection()
+
   return {
-    feeds: new FeedsCollection(),
-    queue: new QueueCollection(),
+    feeds: feeds,
+    queue: queue,
     notify: notifications,
 
     utils: {

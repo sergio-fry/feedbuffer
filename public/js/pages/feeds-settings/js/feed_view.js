@@ -58,6 +58,8 @@ define([
       this.model.save().then(function() {
         widget.state = "STATE_SHOW"
         widget.render();
+        api.feeds.add(widget.model);
+        api.feeds.trigger("change");
       }).fail(function() {
         widget.$el.find(".actions a").removeClass("disabled");
         api.notify.error("Не удалось сохранить ленту " + (widget.model.get("title") || ""));
@@ -74,6 +76,8 @@ define([
       this.$el.find(".actions a").addClass("disabled");
       this.model.destroy().then(function() {
         widget.$el.replaceWith("<tr><td colspan='4' class='deleted'>Лента "+widget.model.get('title')+" удалена</td></tr>");
+        api.feeds.remove(widget.model);
+        api.feeds.trigger("change");
       }).fail(function() {
         widget.$el.find(".actions a").removeClass("disabled");
         api.notify.error("Не удалось удалить ленту " + widget.model.get("title"));

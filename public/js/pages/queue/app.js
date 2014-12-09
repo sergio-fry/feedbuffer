@@ -1,7 +1,23 @@
-define(["jquery"], function ($) {
+define([
+  "jquery", "backbone", "underscore", "require", "api",
+  "./js/page_view",
+], function (
+  $, Backbone, _, require, api,
+  PageView
+) {
+
+  var page = new PageView();
+
   return {
     render: function($el) {
-      return $el.html("Очередь пока пуста!");
+      page.setElement($el);
+      page.render();
+
+      api.queue.on("change", function() {
+        page.render();
+      });
+
+      return page.$el;
     }
   };
 });
