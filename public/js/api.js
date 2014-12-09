@@ -29,12 +29,15 @@ define(["jquery", "backbone", "humane"], function($, Backbone, humane) {
   var URI = function(url) {
     var l = document.createElement("a");
     l.href = url;
-    l.favicon = "http://g.etfv.co/"+l.protocol+"//"+l.hostname;
+    l.favicon = "http://www.google.com/s2/favicons?domain="+l.hostname;
     return l;
   }
 
   var feeds = new FeedsCollection()
   var queue = new QueueCollection()
+
+  feeds.fetch();
+  queue.fetch();
 
   return {
     feeds: feeds,

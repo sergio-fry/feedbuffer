@@ -47,7 +47,18 @@ RSpec.describe ExportQueue, :type => :model do
   end
 
   describe "#schedule!" do
-    it "should update next_scheduled_at"
-    it "should update scheduled_at for items"
+    it "should update next_scheduled_at" do
+      item = @queue.add_item :title => "foo"
+      @queue.schedule!
+
+      expect(@queue.next_scheduled_at).to be_present
+    end
+
+    it "should update scheduled_at for items" do
+      item = @queue.add_item :title => "foo"
+      @queue.schedule!
+
+      expect(@queue.find_item(item.id).scheduled_at).to be_present
+    end
   end
 end

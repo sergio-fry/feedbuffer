@@ -20,19 +20,15 @@ define([
 
       this.$el.html(template()).append("<link rel='stylesheet' href='"+require.toUrl("./../css/style.css")+"'>");
 
-      var feeds = api.feeds;
-      
-      feeds.fetch().then(function() {
-        var table = $("<table>").attr({ class: "table table-striped", id: "feeds" }).append(
-          "<tr><th></th><th>Сайт</th><th>URL</th><th></th></tr>"
-        );
+      var table = $("<table>").attr({ class: "table table-striped", id: "feeds" }).append(
+        "<tr><th></th><th>Сайт</th><th>URL</th><th></th></tr>"
+      );
 
-        feeds.chain().sortBy(function(f) { return f.get('id') }).each(function(feed) {
-          table.append((new FeedView({ model: feed })).render());
-        });
+      api.feeds.chain().sortBy(function(f) { return f.get('id') }).each(function(feed) {
+        table.append((new FeedView({ model: feed })).render());
+      });
 
-        $el.find(".table_wrapper").append(table);
-      })
+      $el.find(".table_wrapper").append(table);
 
       return this.$el;
     },

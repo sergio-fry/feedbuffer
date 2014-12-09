@@ -11,39 +11,39 @@ define([
 ) {
 
   var PageView = Backbone.View.extend({
+    initialize: function() {
+
+      this.init_feed_fetch();
+      var widget = this;
+
+      api.feeds.on("add remove change", function() {
+        widget.init_feed_fetch();
+      });
+    },
+
+    init_feed_fetch: function() {
+      this.feed_fetcher = new FeedFetcher(_(api.feeds.map(function(f) { return f.get('url') })).uniq());
+    },
     events: {
     },
     template: _.template(template),
 
     render: function() {
-      var $el = this.$el;
-      var template = this.template;
+      this.$el.html(this.template()).append("<link rel='stylesheet' href='"+require.toUrl("./../css/style.css")+"'>");
 
-      this.$el.html(template()).append("<link rel='stylesheet' href='"+require.toUrl("./../css/style.css")+"'>");
+      var wrapper = $("<div>");
 
-      var feeds = api.feeds;
+      var queued_urls = api.queue.map(function(el, i) { return el.get('url') });
 
-
-      var widget = this;
-      feeds.fetch().then(function() {
-        var feed_fetcher = new FeedFetcher(_(feeds.map(function(f) { return f.get('url') })).uniq());
-
-        var wrapper = $("<div>");
-
-        api.queue.fetch().then(function() {
-          var queued_urls = api.queue.map(function(el, i) { return el.get('url') });
-
-          feed_fetcher.fetch_items({ limit: 20, limit_per_feed: 10 }, function(items) {
-            _.chain(items).reject(function(el) {
-              return queued_urls.indexOf(el.link) != -1 ;
-            }).each(function(item) {
-              wrapper.append(new ItemView({ item: item }).render());
-            });
-          });
+      this.feed_fetcher.fetch_items({ limit: 20, limit_per_feed: 10 }, function(items) {
+        _.chain(items).reject(function(el) {
+          return queued_urls.indexOf(el.link) != -1 ;
+        }).each(function(item) {
+          wrapper.append(new ItemView({ item: item }).render());
         });
+      });
 
-        $el.find("#feed_wrapper").append(wrapper);
-      })
+      this.$el.find("#feed_wrapper").append(wrapper);
       
       return this.$el;
     },

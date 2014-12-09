@@ -21,18 +21,15 @@ define([
 
       this.$el.html(template()).append("<link rel='stylesheet' href='"+require.toUrl("./../css/style.css")+"'>");
 
-      var feeds = api.feeds;
-
       var widget = this;
-      api.queue.fetch().then(function() {
-        var wrapper = $("<div>");
 
-        api.queue.each(function(item) {
-          wrapper.append(new ItemView({ model: item }).render());
-        });
+      var wrapper = $("<div>");
 
-        $el.find("#queue_wrapper").append(wrapper);
+      api.queue.each(function(item) {
+        wrapper.append(new ItemView({ model: item }).render());
       });
+
+      $el.find("#queue_wrapper").append(wrapper);
       
       return this.$el;
     },

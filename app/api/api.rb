@@ -64,6 +64,7 @@ module Api
           expose :id
           expose :title
           expose :url
+          expose :scheduled_at
         end
       end
 
@@ -82,14 +83,16 @@ module Api
         end
         post do
           @item = @queue.add_item(params)
+          @queue.schedule!
           @queue.save!
 
-          present @item, with: Entities::QueueItem
+          present @queue.find_item(@item.id), with: Entities::QueueItem
         end
 
         namespace ':item_id' do
           delete do
             @queue.delete_item(params[:item_id])
+            @queue.schedule!
             @queue.save!
           end
         end

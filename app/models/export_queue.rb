@@ -13,6 +13,20 @@ class ExportQueue < ActiveRecord::Base
     self.items_attributes.reject! { |el| el["id"] == item_id }
   end
 
+  def find_item(item_id)
+    build_item self.items_attributes.find { |el| el["id"] == item_id } rescue nil
+  end
+
+  def update_item(item_id, attrs)
+    self.items_attributes = items_attributes.map do |el|
+      if el["id"] == item_id
+        el.merge(attrs)
+      else
+        el
+      end
+    end
+  end
+
   def items
     items_attributes.map do |attrs|
       OpenStruct.new attrs 
@@ -21,5 +35,15 @@ class ExportQueue < ActiveRecord::Base
 
   def build_item(attributes)
     OpenStruct.new attributes 
+  end
+
+  def schedule!
+    time = 1.hour.from_now
+    self.next_scheduled_at = time
+
+    items.each do |item|
+      update_item item.id, { scheduled_at: time }
+      time += 1.hour
+    end
   end
 end

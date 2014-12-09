@@ -11,9 +11,10 @@ define([
   return {
     render: function($el) {
       page.setElement($el);
+
       page.render();
 
-      api.queue.on("change", function() {
+      api.queue.on("add remove sync", function() {
         page.render();
       });
 

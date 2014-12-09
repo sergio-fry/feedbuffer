@@ -13,6 +13,10 @@ define([
       page.setElement($el);
       page.render();
 
+      api.feeds.on("sync", function() {
+        page.render();
+      });
+
       return page.$el;
     }
   };

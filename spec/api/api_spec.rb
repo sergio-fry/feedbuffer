@@ -15,6 +15,7 @@ RSpec.describe Api::Api, type: :request do
 
     it "returns an array of items" do
       @queue.add_item(title: "foo", url: "http://bar.com")
+      @queue.schedule!
       @queue.save!
 
       get "/api/v1/queue/items"

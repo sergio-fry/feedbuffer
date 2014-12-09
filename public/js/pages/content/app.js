@@ -11,9 +11,14 @@ define([
   return {
     render: function($el) {
       page.setElement($el);
+
       page.render();
 
-      api.feeds.on("change", function() {
+      api.feeds.on("add remove change", function() {
+        page.render();
+      });
+
+      api.queue.on("add remove change", function() {
         page.render();
       });
 

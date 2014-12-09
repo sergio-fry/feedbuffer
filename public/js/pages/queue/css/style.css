@@ -1,3 +1,4 @@
 #queue_wrapper .item { padding-bottom: 10px  }
 #queue_wrapper .item .wrapper { border: 1px solid #cdd; border-radius: 3px; padding: 10px   }
-#queue_wrapper .item .actions { text-align: right  }
+#queue_wrapper .item .footer { color: grey; font-size: small; padding-top: 5px; }
+#queue_wrapper .item .actions {  }

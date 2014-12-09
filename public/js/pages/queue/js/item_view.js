@@ -15,7 +15,12 @@ define([
     template: _.template(template),
 
     render: function() {
-      this.$el.html(this.template({ title: this.model.get('title'), url: this.model.get('url'), link: api.utils.URI(this.model.get('url')) }));
+      this.$el.html(this.template({
+        title: this.model.get('title'),
+        url: this.model.get('url'),
+        link: api.utils.URI(this.model.get('url')),
+        scheduled_at: this.model.get('scheduled_at'),
+      }));
 
       return this.$el;
     },
