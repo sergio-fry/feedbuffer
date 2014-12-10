@@ -4,18 +4,17 @@ define([
   $, _, api
 ) {
 
-  var FeedFetcher = function(feeds) {
-    this.feeds = _(feeds);
+  var FeedFetcher = function() {
     this.cache = {};
   }
 
-  FeedFetcher.prototype.fetch_items = function(options, callback) {
+  FeedFetcher.prototype.fetch_items = function(feed_urls, options, callback) {
     var fetcher = this;
     var items = [];
 
-    var _callback = _.after(this.feeds.size(), callback);
+    var _callback = _.after(_(feed_urls).size(), callback);
 
-    this.feeds.each(function(feed_url) {
+    _(feed_urls).each(function(feed_url) {
       fetcher.fetch_feed(feed_url, options).then(function(_items) {
         items = _.union(items, _items.responseData.feed.entries);
         

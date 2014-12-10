@@ -12,18 +12,9 @@ define([
 
   var PageView = Backbone.View.extend({
     initialize: function() {
-
-      this.init_feed_fetch();
-      var widget = this;
-
-      api.feeds.on("add remove change", function() {
-        widget.init_feed_fetch();
-      });
+      this.feed_fetcher = new FeedFetcher();
     },
 
-    init_feed_fetch: function() {
-      this.feed_fetcher = new FeedFetcher(_(api.feeds.map(function(f) { return f.get('url') })).uniq());
-    },
     events: {
     },
     template: _.template(template),
@@ -35,7 +26,9 @@ define([
 
       var queued_urls = api.queue.map(function(el, i) { return el.get('url') });
 
-      this.feed_fetcher.fetch_items({ limit: 20, limit_per_feed: 10 }, function(items) {
+      var feed_urls = _(api.feeds.map(function(f) { return f.get('url') })).uniq();
+
+      this.feed_fetcher.fetch_items(feed_urls, { limit: 20, limit_per_feed: 10 }, function(items) {
         _.chain(items).reject(function(el) {
           return queued_urls.indexOf(el.link) != -1 ;
         }).each(function(item) {
