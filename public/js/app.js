@@ -23,7 +23,7 @@ require.config({
   }
 });
 
-require(["core", "underscore"], function(core, _) {
+require(["tabs", "underscore"], function(Tabs, _) {
   require(["jquery"], function() {
     require(["/bootstrap/js/bootstrap.min.js"]);
   });
@@ -43,10 +43,10 @@ require(["core", "underscore"], function(core, _) {
       var page = page_modules[index];
       var id = p[0], title = p[1];
 
-      core.add_page(id, page, title);
+      Tabs.add_page(id, page, title);
 
       if((window.location.hash == "" && index == 0) || window.location.hash == "#" + id) {
-        core.select_page(id);
+        Tabs.select_page(id);
       }
     });
   })
