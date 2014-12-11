@@ -2,8 +2,9 @@
   <div class="wrapper">
     <%= title %>
     <a href="<%= url %>" title="<%= url %>" target="_blank"><%= (url.length < 22) ? url : url.substr(0, 19) + "..." %></a>
-    <br />
-    <div class="source"><img src="<%= link.favicon %>" width="16px" height="16px" /> <%= link.hostname %></div>
+    <div class="footer">
+      <div class="source pull-right"><img src="<%= link.favicon %>" width="16px" height="16px" /> <%= link.hostname %></div>
+    </div>
   </div>
 </td>
 <td class="actions"><a href="#" class="btn btn-default add-to-queue" title="Добавить в очередь публикаций">Добавить</a></td>

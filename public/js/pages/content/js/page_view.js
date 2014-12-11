@@ -12,7 +12,7 @@ define([
 
   var PageView = Backbone.View.extend({
     initialize: function() {
-      this.feed_fetcher = new FeedFetcher();
+      this.feed_fetcher = new FeedFetcher({ limit: 20, limit_per_feed: 10 });
     },
 
     events: {
@@ -28,7 +28,7 @@ define([
 
       var feed_urls = _(api.feeds.map(function(f) { return f.get('url') })).uniq();
 
-      this.feed_fetcher.fetch_items(feed_urls, { limit: 20, limit_per_feed: 10 }, function(items) {
+      this.feed_fetcher.fetch_items(feed_urls, function(items) {
         _.chain(items).reject(function(el) {
           return queued_urls.indexOf(el.link) != -1 ;
         }).each(function(item) {
