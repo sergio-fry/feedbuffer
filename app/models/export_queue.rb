@@ -2,6 +2,14 @@ require 'digest/sha1'
 class ExportQueue < ActiveRecord::Base
   include SerializedItems
 
+  def add_item_with_scheduling(attributes)
+    attributes = attributes.clone
+    attributes["scheduled_at"] = next_schedule_time items.last.try(:scheduled_at) || Time.now
+    add_item_without_scheduling(attributes)
+  end
+
+  alias_method_chain :add_item, :scheduling
+
   def schedule!
     time = next_schedule_time Time.now
     self.next_scheduled_at = time
@@ -18,6 +26,11 @@ class ExportQueue < ActiveRecord::Base
         export_history.add_item item.to_h.stringify_keys
         delete_item item.id
       end
+    end
+
+    transaction do
+      save!
+      export_history.save!
     end
   end
 

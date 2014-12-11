@@ -5,7 +5,7 @@ module SerializedItems
     serialize :items_attributes, Array
 
     def add_item(attributes)
-      attrs = ({ "id" => SecureRandom.uuid }).merge(attributes.stringify_keys.extract!("id", "title", "url")).to_hash
+      attrs = ({ "id" => SecureRandom.uuid }).merge(attributes.stringify_keys.extract!("id", "title", "url", "scheduled_at", "published_at")).to_hash
       self.items_attributes << attrs
 
       build_item(attrs)

@@ -82,8 +82,7 @@ module Api
           optional :url, type: String
         end
         post do
-          @item = @queue.add_item(params)
-          @queue.schedule!
+          @item = @queue.add_item(params.extract!(:title, :url))
           @queue.save!
 
           present @queue.find_item(@item.id), with: Entities::QueueItem
@@ -95,6 +94,27 @@ module Api
             @queue.schedule!
             @queue.save!
           end
+        end
+      end
+    end
+
+    namespace :history do
+      module Entities
+        class HistoryItem < Grape::Entity
+          expose :id
+          expose :title
+          expose :url
+          #expose :published_at
+        end
+      end
+
+      before do
+        @history = ExportHistory.first || ExportHistory.create
+      end
+
+      namespace :items do
+        get do
+          present @history.items, with: Entities::HistoryItem
         end
       end
     end
