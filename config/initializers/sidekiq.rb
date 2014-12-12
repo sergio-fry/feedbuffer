@@ -1,4 +1,4 @@
-ENV['REDIS_PROVIDER'] ||= "redis://localhost:6379"
+ENV['REDIS_PROVIDER'] ||= ENV['REDISCLOUD_URL'] || "redis://localhost:6379"
 
 Sidekiq.configure_server do |config|
   config.redis = { :url => ENV['REDIS_PROVIDER'], :namespace => 'feed-buffer' }
