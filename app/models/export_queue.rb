@@ -2,7 +2,8 @@ require 'digest/sha1'
 class ExportQueue < ActiveRecord::Base
   include SerializedItems
 
-  after_commit :add_export_job
+
+  after_save lambda { add_export_job if next_scheduled_at_changed? }
 
   def add_item_with_scheduling(attributes)
     attributes = attributes.clone
