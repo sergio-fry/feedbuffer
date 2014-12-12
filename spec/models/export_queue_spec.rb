@@ -73,7 +73,7 @@ RSpec.describe ExportQueue, :type => :model do
     it "should export expired item" do
       @queue.update_item(@item.id, :scheduled_at => 1.minute.ago)
 
-      expect(@export_history).to receive(:add_item) do |attrs|
+      expect(@export_history).to receive(:unshift_item) do |attrs|
         expect(attrs["title"]).to eq("foo")
       end
 
