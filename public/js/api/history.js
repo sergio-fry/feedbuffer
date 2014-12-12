@@ -8,7 +8,7 @@ define(["jquery", "backbone"], function($, Backbone) {
     model: HistoryItem,
   });
 
-  var history = new HistoryItem();
+  var history = new HistoryCollection();
 
   return history;
 });

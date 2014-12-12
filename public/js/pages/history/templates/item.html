@@ -1,0 +1,12 @@
+<div class="item">
+  <div class="wrapper">
+    <%= title %>
+    <a href="<%= url %>" title="<%= url %>" target="_blank"><%= (url.length < 22) ? url : url.substr(0, 19) + "..." %></a>
+   
+    <div class="footer">
+      <span class="time"><span class="glyphicon glyphicon-time"></span> <%= published_at %></span>
+      <div class="actions invisible pull-right">
+      </div>
+    </div>
+  </div>
+</div>

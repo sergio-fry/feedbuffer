@@ -11,6 +11,13 @@ module SerializedItems
       build_item(attrs)
     end
 
+    def unshift_item(attributes)
+      attrs = ({ "id" => SecureRandom.uuid }).merge(attributes.stringify_keys.extract!("id", "title", "url", "scheduled_at", "published_at")).to_hash
+      self.items_attributes.unshift attrs
+
+      build_item(attrs)
+    end
+
     def delete_item(item_id)
       self.items_attributes.reject! { |el| el["id"] == item_id }
     end

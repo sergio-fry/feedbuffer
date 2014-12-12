@@ -44,3 +44,6 @@ gem 'grape-entity'
 group :development, :test do
   gem 'rspec-rails'
 end
+
+gem 'sidekiq'
+gem 'sidekiq-scheduler'

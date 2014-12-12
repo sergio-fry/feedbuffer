@@ -2,6 +2,8 @@ require 'digest/sha1'
 class ExportQueue < ActiveRecord::Base
   include SerializedItems
 
+  after_commit :add_export_job
+
   def add_item_with_scheduling(attributes)
     attributes = attributes.clone
     attributes["scheduled_at"] = next_schedule_time items.last.try(:scheduled_at) || Time.now
@@ -23,7 +25,7 @@ class ExportQueue < ActiveRecord::Base
   def export!
     items.each do |item|
       if item.scheduled_at.past?
-        export_history.add_item item.to_h.stringify_keys
+        export_history.unshift_item item.to_h.stringify_keys.merge("published_at" => Time.now)
         delete_item item.id
       end
     end
@@ -57,12 +59,16 @@ class ExportQueue < ActiveRecord::Base
 
   private
 
+  def add_export_job
+    Exporter.perform_at(next_scheduled_at, id) if items.present?
+  end
+
   def times
-    [8.hours + 30.minutes, 12.hours, 19.hours + 45.minutes]
+    [8.hours + 30.minutes, 12.hours, 19.hours + 45.minutes, 23.hours + 1.minute]
   end
 
   def week_days
-    [1, 3, 5]
+    [1, 3, 4, 5]
   end
 
   def allowed_day?(time)

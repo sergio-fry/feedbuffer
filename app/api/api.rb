@@ -104,7 +104,7 @@ module Api
           expose :id
           expose :title
           expose :url
-          #expose :published_at
+          expose :published_at
         end
       end
 

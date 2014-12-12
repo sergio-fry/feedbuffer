@@ -19,7 +19,7 @@ define([
         title: this.model.get('title'),
         url: this.model.get('url'),
         link: api.utils.URI(this.model.get('url')),
-        scheduled_at: this.model.get('scheduled_at'),
+        published_at: this.model.get('published_at'),
       }));
 
       return this.$el;
@@ -39,7 +39,6 @@ define([
 
       this.model.destroy().then(function() {
         widget.$el.fadeOut();
-        api.queue.fetch();
       }).fail(function() {
         widget.$el.fadeOut();
       });

@@ -31,6 +31,7 @@ require(["tabs", "underscore"], function(Tabs, _) {
   var pages = [
     ["queue", "Очередь"],
     ["content", "Новое"],
+    ["history", "Публикации"],
     ["feeds-settings", "Настройка лент"],
   ];
 
