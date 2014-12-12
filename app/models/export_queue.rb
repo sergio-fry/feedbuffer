@@ -31,6 +31,7 @@ class ExportQueue < ActiveRecord::Base
     end
 
     transaction do
+      self.next_scheduled_at = items.first.try(:scheduled_at)
       save!
       export_history.save!
     end

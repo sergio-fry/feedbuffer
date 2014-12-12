@@ -66,12 +66,11 @@ RSpec.describe ExportQueue, :type => :model do
     before do
       @export_history = ExportHistory.new
       allow(@queue).to receive(:export_history).and_return(@export_history)
-
-      @item = @queue.add_item :title => "foo"
+      @item = @queue.add_item({ :title => "foo" })
     end
 
     it "should export expired item" do
-      @queue.update_item(@item.id, :scheduled_at => 1.minute.ago)
+      @queue.update_item(@item.id, { :scheduled_at => 1.minute.ago })
 
       expect(@export_history).to receive(:unshift_item) do |attrs|
         expect(attrs["title"]).to eq("foo")
@@ -82,6 +81,26 @@ RSpec.describe ExportQueue, :type => :model do
       end.to change{ @queue.items.size }.by(-1)
     end
 
-    it "should not export item scheduled to future"
+    it "should not export item scheduled to future" do
+      @queue.update_item(@item.id, { :scheduled_at => 1.minute.from_now })
+
+      expect do
+        @queue.export!
+      end.not_to change{ @queue.items.size }
+    end
+
+    it "should update scheduled_at" do
+      @queue.update_item(@item.id, { :scheduled_at => 1.minute.ago })
+      item_in_future = @queue.add_item({ :title => "bar" })
+      @queue.update_item(item_in_future.id, { :scheduled_at => 1.hour.from_now })
+      @item = @queue.find_item @item.id
+      item_in_future = @queue.find_item item_in_future.id
+
+      @queue.next_scheduled_at = @item.scheduled_at
+
+      @queue.export!
+
+      expect(@queue.next_scheduled_at).to eq(item_in_future.scheduled_at)
+    end
   end
 end
